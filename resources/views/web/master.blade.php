@@ -1,10 +1,17 @@
+
+@php
+    $setting = \App\Models\Setting::first();
+@endphp
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Online store for latest products, phones, brands, and categories. Best prices and fast delivery.">
+    <meta name="description" content="{{ $setting->hero_description }}">
+        
+
     <meta name="keywords" content="ecommerce, online shop, phones, smartphones, products, brands, buy online, best prices, Laravel store">
     <meta name="author" content="Your Store Name">
     <link rel="stylesheet" href="{{ asset('asset/css/bootstrap.min.css') }}">
@@ -41,7 +48,7 @@
                         <a class="nav-link " aria-current="page" href="{{ route('about') }}">ِAbout</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " aria-current="page" href="{{ route('contact') }}">Contact</a>
+                        <a class="nav-link " aria-current="page" href="{{ route('contact.create') }}">Contact</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link " aria-current="page" href="{{ route('cart.request') }}">My Order</a>
@@ -274,7 +281,7 @@
         </div>
     </footer>
 
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{ asset('asset/js/bootstrap.bundle.min.js') }}"></script>
 </body>
 

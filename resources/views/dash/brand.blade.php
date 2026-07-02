@@ -86,8 +86,9 @@
         padding: 16px;
         border-top: 1px solid var(--border-color) !important;
         border-bottom: 1px solid var(--border-color) !important;
-        color: var(--text-color);
+        color: white;
         text-align: center;
+        background: black;
     }
     
     /* حواف دائرية لصفوف الجدول */

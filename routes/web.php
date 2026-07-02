@@ -4,8 +4,10 @@ use App\Http\Controllers\AddToCartController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\categoryController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardOrderController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\ProfileController;
 use App\Models\CategoryModel;
 use App\Models\ProductsModel;
@@ -22,10 +24,6 @@ Route::get('/', function () {
 //     return view("web.MyOrders");
 // })->name('myorder');
 
-
-Route::get("/contact", function () {
-    return view("web.contact");
-})->name("contact")->middleware('auth');
 
 
 
@@ -209,9 +207,48 @@ Route::middleware('auth')->group(function () {
     });
 });
 
+
+
+
+
+
+Route::get('/contact', [ContactController::class, 'create'])->name('contact.create')->middleware('auth');
+
+Route::get('admin/get-contact', [ContactController::class, 'index'])->name('contact.get')->middleware('auth');
+
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store')->middleware('auth');
+
+Route::delete('/admin/contact/{id}', [ContactController::class, 'destroy'])
+    ->name('delete.contact')->middleware('auth');
+
+
+
+
+
+
+
+
+
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+
+
+
+
+
+
+Route::middleware('auth')->group(function(){
+
+    Route::get('/admin/settings', [SettingController::class,'edit'])->name('settings.edit');
+Route::post('/admin/settings', [SettingController::class,'update'])->name('settings.update');
+
+});
+
+
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

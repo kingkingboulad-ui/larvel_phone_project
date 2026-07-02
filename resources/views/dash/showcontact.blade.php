@@ -1,10 +1,11 @@
 @extends('dash.master_dash')
 
 @section('content')
-<div class="container-fluid px-0 py-4 w-100">
+ <div class="container-fluid px-0 py-4 w-100">
     <div class="custom-card w-100">
+        <!-- هيدر الصفحة والبحث المتناسق -->
         <div class="card-header-custom d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-4 px-3">
-            <h3 class="mb-0 fw-bold table-title">Data Management</h3>
+            <h3 class="mb-0 fw-bold table-title">Customer Messages</h3>
             
             <div class="d-flex align-items-center gap-2 flex-grow-1 flex-sm-grow-0 justify-content-end">
                 <div class="search-form m-0" style="margin-top: 10px">
@@ -13,68 +14,59 @@
                             <i class="fas fa-search"></i>
                         </span>
                         <input type="text" id="tableSearch" class="form-control form-control-sm search-input" 
-                               placeholder="Search by name..." >
+                               placeholder="Search messages..." >
                         <button class="btn-clear-search" type="button" id="clearSearch" style="display: none;">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
                 </div>
-
-                <a href="{{ route('admin.category') }}" class="btn btn-primary-custom btn-sm text-nowrap" style="margin-top: 15px">
-                    <i class="fas fa-plus me-1"></i> Add New
-                </a>
             </div>
         </div>
 
+        <!-- الجدول المتناسق والمحاذي عمودياً وأفقياً -->
         <div class="table-responsive w-100">
-            <table class="table custom-table align-middle w-100 m-0" id="categoryTable">
-                <thead style="text-align: center">
+            <table class="table custom-table align-middle w-100 m-0" id="contactTable">
+                <thead>
                     <tr>
                         <th scope="col" style="width: 80px;">#</th>
                         <th scope="col">Name</th>
-                        <th scope="col">img</th>
-                        <th scope="col">Status</th>
-                        <th scope="col" class="text-center" style="width: 220px;">Actions</th>
+                        <th scope="col">Email</th>
+                        <th scope="col" style="max-width: 400px;">Message</th>
+                        <th scope="col">Date</th>
+                        <th scope="col" class="text-center" style="width: 150px;">Actions</th>
                     </tr>
                 </thead>
-                <tbody  >
-                    @foreach ($getcategory as $index => $item)
-                    <tr class="category-row ">
+                <tbody>
+                    @foreach ($getcontact as $index => $message)
+                    <tr class="contact-row">
+                        <!-- الرقم التسلسلي -->
                         <td>{{ $index + 1 }}</td>
                     
-                        <td class="fw-semibold  category-name">{{ $item->name }}</td>
+                        <!-- اسم العميل -->
+                        <td class="fw-semibold contact-name">{{ $message->name }}</td>
                     
-                        {{-- Image --}}
-                        <td>
-                            <img src="{{ asset('storage/' . $item->file) }}" width="60" height="60" style="border-radius: 8px;"     loading="lazy">
+                        <!-- البريد الإلكتروني -->
+                        <td class="contact-email text-muted">{{ $message->email }}</td>
+                    
+                        <!-- نص الرسالة مع حماية المظهر العام عند الرسائل الطويلة -->
+                        <td class="contact-text text-start px-4" style="max-width: 400px; white-space: normal; word-break: break-word;">
+                            {{ $message->message }}
+                        </td>
+
+                        <!-- تاريخ الإرسال -->
+                        <td class="text-muted" style="font-size: 0.9rem;">
+                            {{ $message->created_at->format('Y-m-d H:i') }}
                         </td>
                     
-                        {{-- Status --}}
-                        <td>
-                            @if($item->is_active)
-                                <span class="badge bg-success-subtle text-success border border-success-subtle">
-                                    Active
-                                </span>
-                            @else
-                                <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle">
-                                    Suspended
-                                </span>
-                            @endif
-                        </td>
-                    
-                        {{-- Actions --}}
+                        <!-- زر الحذف الموثوق -->
                         <td class="text-center">
-                            <div class="d-flex justify-content-center gap-2">
-                                <a href="{{route('admin.category.edit',$item->id) }}" class="btn btn-action btn-edit">
-                                    <i class="fas fa-edit"></i> Edit
-                                </a>
-                    
-                                <form action="{{ route('delete.category',$item->id) }}" method="POST" style="display:inline;">
+                            <div class="d-flex justify-content-center">
+                                <form action="{{ route('delete.contact', $message->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
                                 
                                     <button type="submit" class="btn btn-action btn-delete"
-                                        onclick="return confirm('Are you sure?')">
+                                            onclick="return confirm('Are you sure you want to delete this message?')">
                                         <i class="fas fa-trash-alt"></i> Delete
                                     </button>
                                 </form>
@@ -83,13 +75,15 @@
                     </tr>
                     @endforeach
                     
+                    <!-- سطر يظهر عند عدم تطابق أي نتيجة في البحث الفوري -->
                     <tr id="noResultsRow" style="display: none;">
-                        <td colspan="5" class="text-center py-4 text-muted">No matching data found.</td>
+                        <td colspan="6" class="text-center py-4 text-muted">No matching messages found.</td>
                     </tr>
 
-                    @if($getcategory->isEmpty())
+                    <!-- سطر يظهر إذا كانت قاعدة البيانات فارغة تماماً من الرسائل -->
+                    @if($getcontact->isEmpty())
                     <tr>
-                        <td colspan="5" class="text-center py-4 text-muted">No data found.</td>
+                        <td colspan="6" class="text-center py-4 text-muted">No messages received yet.</td>
                     </tr>
                     @endif
                 </tbody>
@@ -98,24 +92,28 @@
     </div>
 </div>
 
+<!-- السكريبت الخاص بالبحث الفوري المتطور بداخل الجدول -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const searchInput = document.getElementById('tableSearch');
     const clearBtn = document.getElementById('clearSearch');
-    const rows = document.querySelectorAll('.category-row');
+    const rows = document.querySelectorAll('.contact-row');
     const noResultsRow = document.getElementById('noResultsRow');
 
     searchInput.addEventListener('input', function () {
         const query = this.value.toLowerCase().trim();
         let hasResults = false;
 
-        // إظهار/إخفاء زر الحذف (X) بناءً على وجود نص
+        // إظهار أو إخفاء زر (X) لمسح حقل البحث
         clearBtn.style.display = query.length > 0 ? 'block' : 'none';
 
         rows.forEach(row => {
-            const nameText = row.querySelector('.category-name').textContent.toLowerCase();
+            // البحث يبحث بداخل الاسم، الإيميل، ونص الرسالة معاً لتسهيل الوصول
+            const nameText = row.querySelector('.contact-name').textContent.toLowerCase();
+            const emailText = row.querySelector('.contact-email').textContent.toLowerCase();
+            const msgText = row.querySelector('.contact-text').textContent.toLowerCase();
             
-            if (nameText.includes(query)) {
+            if (nameText.includes(query) || emailText.includes(query) || msgText.includes(query)) {
                 row.style.display = ''; 
                 hasResults = true;
             } else {
@@ -138,7 +136,13 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
+<!-- الستايل الموحد الفخم للوضع الداكن (Premium Dark Mode) -->
 <style>
+    :root {
+        --table-row-bg: #121212;
+        --table-row-hover: #1a1a1a;
+    }
+
     body {
         background-color: var(--bg-color);
         color: var(--text-color);
@@ -161,7 +165,6 @@ document.addEventListener('DOMContentLoaded', function () {
         letter-spacing: 0.5px;
     }
 
-    /* تنسيقات حقل البحث الحديثة */
     .search-form {
         max-width: 280px;
         width: 100%;
@@ -217,52 +220,60 @@ document.addEventListener('DOMContentLoaded', function () {
 
     .custom-table {
         border-collapse: separate;
-        border-spacing: 0 8px;
+        border-spacing: 0 10px;
         width: 100% !important;
-        background-color: #090909;
+        background-color: transparent !important;
     }
 
     .custom-table thead th {
-        background-color: #090909;
+        background-color: transparent !important;
         color: var(--text-muted);
-        border-bottom: none;
-        padding: 14px 16px;
+        border: none;
+        padding: 12px 16px;
         font-weight: 600;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         text-transform: uppercase;
         letter-spacing: 0.5px;
+        text-align: center;
     }
 
     .custom-table tbody tr {
+        background-color: var(--table-row-bg) !important;
         box-shadow: var(--shadow-sm);
-        transition: var(--transition);
-        text-align: center;
-
+        transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
     } 
 
     .custom-table tbody tr:hover {
         transform: translateY(-2px);
-        background-color: rgba(0, 179, 94, 0.02);
+        background-color: var(--table-row-hover) !important;
+        box-shadow: 0 4px 12px rgba(0, 179, 94, 0.08);
     }
 
     .custom-table tbody td {
-        padding: 16px;
-        border-top: 1px solid var(--border-color);
-        border-bottom: 1px solid var(--border-color);
-        color:white;
+        padding: 14px 16px;
+        border-top: 1px solid var(--border-color) !important;
+        border-bottom: 1px solid var(--border-color) !important;
+        color: var(--text-color) !important;
+        vertical-align: middle;
+        text-align: center;
+
         background: black
     }
 
+    .custom-table tbody td.contact-name {
+        color: var(--text-color) !important;
+    }
+
     .custom-table tbody tr td:first-child {
-        border-left: 1px solid var(--border-color);
-        border-top-left-radius: var(--radius-md);
-        border-bottom-left-radius: var(--radius-md);
+        border-left: 1px solid var(--border-color) !important;
+        border-top-left-radius: var(--radius-md) !important;
+        border-bottom-left-radius: var(--radius-md) !important;
     }
 
     .custom-table tbody tr td:last-child {
-        border-right: 1px solid var(--border-color);
-        border-top-right-radius: var(--radius-md);
-        border-bottom-right-radius: var(--radius-md);
+        border-right: 1px solid var(--border-color) !important;
+        border-top-right-radius: var(--radius-md) !important;
+        border-bottom-right-radius: var(--radius-md) !important;
     }
 
     .btn-action {
@@ -277,45 +288,19 @@ document.addEventListener('DOMContentLoaded', function () {
         border: 1px solid transparent;
     }
 
-    .btn-edit {
-        background-color: transparent;
-        color: var(--primary-color);
-        border-color: var(--primary-color);
-    }
-
-    .btn-edit:hover {
-        background-color: var(--primary-color);
-        color: #ffffff;
-        box-shadow: 0 4px 12px rgba(0, 179, 94, 0.25);
-    }
-
     .btn-delete {
         background-color: transparent;
-        color: wheat;
-        border-color: var(--secondary-color);
+        color: #f87171;
+        border-color: rgba(239, 68, 68, 0.5);
     }
 
     .btn-delete:hover {
         background-color: #ef4444; 
-        color: #ffffff;
+        color: #ffffff !important;
         border-color: #ef4444;
         box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
     }
+</style> 
 
-    .btn-primary-custom {
-        background-color: var(--primary-color);
-        color: #ffffff;
-        border: none;
-        padding: 8px 18px;
-        border-radius: var(--radius-md);
-        transition: var(--transition);
-        font-weight: 500;
-    }
 
-    .btn-primary-custom:hover {
-        background-color: var(--primary-hover);
-        color: #0f172a; 
-        box-shadow: 0 4px 14px rgba(0, 255, 135, 0.4);
-    }
-</style>
 @endsection

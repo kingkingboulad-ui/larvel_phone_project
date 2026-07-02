@@ -61,11 +61,7 @@
                         <i class="fas fa-user-plus"></i> <span>Add User</span>
                     </a>
                 </li>
-                <li class="menu-item">
-                    <a href="add-keywords.html" class="menu-link">
-                        <i class="fas fa-key"></i> <span>Keywords</span>
-                    </a>
-                </li>
+              
 
                 <li class="menu-item">
                     <a href="{{route('dash.orders.index')}}" class="menu-link">
@@ -73,7 +69,7 @@
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="settings.html" class="menu-link">
+                    <a href="{{route('settings.edit')}}" class="menu-link">
                         <i class="fas fa-sliders-h"></i> <span>Settings</span>
                     </a>
                 </li>
