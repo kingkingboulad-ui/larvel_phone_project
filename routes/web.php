@@ -56,7 +56,7 @@ Route::get('admin/notification', function () {
 
 Route::get('/all-product', [PostController::class, 'filter'])->name('products.filter')->middleware('auth');
 
-
+Route::get('/category/{id?}',[categoryController::class,'getcategorybyid'])->name("cat.get")->middleware('auth');
 
 
 Route::middleware(['auth', "role:admin"])->group(function () {
@@ -268,7 +268,9 @@ Route::middleware('auth')->group(function () {
 
 
 
-
+Route::fallback(function(){
+   return view('web.notfound');
+});
 
 
 

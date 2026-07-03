@@ -13,7 +13,7 @@
         
 
     <meta name="keywords" content="ecommerce, online shop, phones, smartphones, products, brands, buy online, best prices, Laravel store">
-    <meta name="author" content="Your Store Name">
+    <meta name="author" content="{{$setting->site_name}}">
     <link rel="stylesheet" href="{{ asset('asset/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="{{ asset('asset/css/style.css') }}">
@@ -207,12 +207,12 @@
                     <h5 class="text-white fw-bold mb-3 fs-6 text-uppercase" style="letter-spacing: 0.5px;">Quick Links
                     </h5>
                     <ul class="list-unstyled footer-links">
-                        <li class="mb-2"><a href="#" class="text-secondary text-decoration-none small">Home</a>
+                        <li class="mb-2"><a href="{{route('index')}}" class="text-secondary text-decoration-none small">Home</a>
                         </li>
-                        <li class="mb-2"><a href="#" class="text-secondary text-decoration-none small">Latest
+                        <li class="mb-2"><a href="{{route('latestproduct')}}" class="text-secondary text-decoration-none small">Latest
                                 Phones</a>
                         </li>
-                        <li class="mb-2"><a href="#"
+                        <li class="mb-2"><a href="{{route('products.filter')}}"
                                 class="text-secondary text-decoration-none small">Accessories</a>
                         </li>
                         <li class="mb-2"><a href="#"

@@ -8,10 +8,11 @@ use Illuminate\Support\Facades\Storage;
 
 class categoryController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         $getcategory = CategoryModel::get();
 
-        return view('dash.showallcategory',compact('getcategory'));
+        return view('dash.showallcategory', compact('getcategory'));
     }
 
     public function create()
@@ -26,27 +27,27 @@ class categoryController extends Controller
             'file' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'status' => 'required|in:active,inactive',
         ]);
-    
+
         $category = new CategoryModel();
-    
+
         $category->name = $request->Category_Name;
         $category->is_active = $request->status === 'active' ? 1 : 0;
-    
+
         if ($request->hasFile('file')) {
-    
+
             $fileName = time() . '_' . uniqid() . '.' . $request->file('file')->extension();
-    
+
             $path = $request->file('file')->storeAs(
                 'categories',
                 $fileName,
                 'public'
             );
-    
+
             $category->file = $path;
         }
-    
+
         $category->save();
-    
+
         return redirect()->back()->with('success', 'Add Category success');
     }
 
@@ -55,18 +56,18 @@ class categoryController extends Controller
     public function delete($id)
     {
         $category = CategoryModel::find($id);
-    
+
         if (!$category) {
             return back()->with('error', 'Category not found');
         }
-    
+
         // حذف الصورة إذا موجودة
         if ($category->file && file_exists(public_path('storage/' . $category->file))) {
             unlink(public_path('storage/' . $category->file));
         }
-    
+
         $category->delete();
-    
+
         return back()->with('success', 'Category deleted successfully');
     }
 
@@ -114,5 +115,18 @@ class categoryController extends Controller
 
         return redirect()->route('admin.showcategory')->with('success', 'Category updated successfully');
         // ملاحظة: تأكد من تعديل اسم الـ Route بناءً على ملف الـ web.php لديك للعودة لصفحة الجدول الأساسية
+    }
+
+
+
+    public function getcategorybyid($id = null)
+    {
+        if (!$id) {
+            return redirect()->back();
+        }
+
+        $category = CategoryModel::with('products')->findOrFail($id);
+
+        return view('web.category', compact('category'));
     }
 }

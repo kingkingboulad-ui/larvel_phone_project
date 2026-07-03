@@ -91,7 +91,7 @@
             <div class="col-12 col-md-6 col-lg-4">
                 <div class="card phone-card h-100 text-white">
                     <div class="img-container">
-                        <img src="{{asset('storage/'.$item->image)}}" class="phone-img img-fluid" alt="Samsung Galaxy S26 Ultra"     loading="lazy">>
+                        <img src="{{asset('storage/'.$item->image)}}" class="phone-img img-fluid" alt="Samsung Galaxy S26 Ultra"     loading="lazy">
                     </div>
                     <div class="card-body d-flex flex-column justify-content-between p-4">
                         <div>

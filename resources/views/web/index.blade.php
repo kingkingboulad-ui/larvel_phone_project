@@ -30,8 +30,8 @@
                     </p>
                     <!-- Action Buttons -->
                     <div class="d-sm-flex justify-content-center justify-content-lg-start gap-3">
-                        <a href="#" class="btn btn-primary-tech px-4 py-3 mb-3 mb-sm-0 fw-bold">Shop Latest Phones</a>
-                        <a href="#" class="btn btn-outline-light-tech px-4 py-3 fw-bold">Explore Accessories</a>
+                        <a href="{{route('latestproduct')}}" class="btn btn-primary-tech px-4 py-3 mb-3 mb-sm-0 fw-bold">Shop Latest Phones</a>
+                        <a href="{{route('products.filter')}}" class="btn btn-outline-light-tech px-4 py-3 fw-bold">Explore Accessories</a>
                     </div>
                 </div>
 
@@ -111,7 +111,7 @@
                                 Explore {{ $item->name }} products
                             </p>
 
-                            <a href="#" class="text-success text-decoration-none stretched-link mt-2"
+                            <a href="{{route('cat.get',$item->id)}}" class="text-success text-decoration-none stretched-link mt-2"
                                 style="color: #00ff87 !important;">
                                 Explore <i class="bi bi-arrow-right"></i>
                             </a>

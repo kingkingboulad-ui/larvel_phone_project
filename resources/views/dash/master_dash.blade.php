@@ -57,8 +57,8 @@
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="add-user.html" class="menu-link">
-                        <i class="fas fa-user-plus"></i> <span>Add User</span>
+                    <a href="{{route('contact.get')}}" class="menu-link">
+                        <i class="fas fa-user-plus"></i> <span>Show Contact</span>
                     </a>
                 </li>
               
