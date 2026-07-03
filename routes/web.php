@@ -230,12 +230,6 @@ Route::delete('/admin/contact/{id}', [ContactController::class, 'destroy'])
 
 
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-
-
 
 
 
