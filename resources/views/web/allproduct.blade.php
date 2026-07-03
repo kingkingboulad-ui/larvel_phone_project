@@ -126,7 +126,7 @@
                             <div class="card product-card border-0 text-white h-100">
                                 <div class="product-img-container">
                                     <img src="{{ asset('storage/' . $item->image) }}" class="img-fluid rounded"
-                                        alt="{{ $item->title }}"     loading="lazy">>
+                                        alt="{{ $item->title }}"     loading="lazy">
                                 </div>
                                 <div class="card-body d-flex flex-column justify-content-between">
                                     <div>
